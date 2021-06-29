@@ -1,7 +1,9 @@
 import express from 'express'
 const router = express.Router()
 
-import { authUser } from '../controllers/userController.js'
+import { authUser,getUserProfile } from '../controllers/userController.js'
+import { protect } from '../middleware/authMiddleware.js'
+
 
 
 
@@ -9,8 +11,8 @@ import { authUser } from '../controllers/userController.js'
 //asynchandler es un middleware para los errores de las rutas y evitar usar try-catch
 
 
-
 router.post('/login',authUser)
+router.route('/profile',(protect,getUserProfile)) //se corre primero este middleware
 
 
 
