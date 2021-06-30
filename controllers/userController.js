@@ -31,9 +31,11 @@ const authUser = asyncHandler(async (req, res) => {
 //@route GET /api/users/profile
 //@acess Private
 
-const getUserProfile = asyncHandler(async (req, res) => {
+const getUserProfile = asyncHandler(async (req, res) => {  
       
     const user = await User.findById(req.user._id) // encontrar un documento por email
+
+
     if (user) {
 
         res.json({
@@ -44,11 +46,55 @@ const getUserProfile = asyncHandler(async (req, res) => {
         })
         
     }else {
+        console.log('entre');
         res.status(404)
         throw new Error('User not found')
     }
 
-    res.send('sucess')
   });
 
-export {authUser,getUserProfile}
+  //@desc  Register a new user
+//@route GET /api/users/profile
+//@acess Public
+
+  
+const registerUser = asyncHandler(async (req, res) => { 
+
+    const { name, email, password } = req.body;
+
+    const userExists = await User.findOne({email:email}) // encontrar un documento por email
+  
+   if (userExists) {
+       res.status(400)
+       throw new Error('User already exists')       
+   }
+
+   const user = await User.create({
+       name,
+       email,
+       password
+   })
+   // si todo anda bien
+
+   if (user) {
+       //me autentico despues de registrarme inmediatamente
+       //201 significa usuario registrado
+       res.status(201).json({
+        _id:user._id,
+        name:user.name,
+        email:user.email,
+        isAdmin:user.isAdmin,
+        token:generateToken(user._id)         
+    })
+       
+   } else{
+       res.status(400)
+       throw new Error('Invalid User data')
+
+   }
+
+
+
+  });
+
+export {authUser,getUserProfile,registerUser}

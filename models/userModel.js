@@ -27,6 +27,22 @@ return await bcrypt.compare(enteredPassword,this.password)
 //usamos this para que sea ese usuario en especifico
 }
 
+userSchema.pre('save', async function(next){
+
+    if (!this.isModified('password')) {
+        next()
+        //solo queremos que esto corra si NO cambia el password
+        //es decir si el cliente no lo actualiza
+        //modified es parte de mongoose sirve para verificar
+
+        
+    }
+
+    //hash password
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password,salt)
+})
+
 
 const User = mongoose.model('User',userSchema);
 
