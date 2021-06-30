@@ -51,4 +51,4 @@ const getUserProfile = asyncHandler(async (req, res) => {
     res.send('sucess')
   });
 
-export {authUser}
+export {authUser,getUserProfile}
