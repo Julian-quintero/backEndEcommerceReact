@@ -11,6 +11,7 @@ const orderSchema = mongoose.Schema({
         name: {type:String,required:true},
         qty: {type:Number,required:true},
         price: {type:Number,required:true},
+        image:{type:String,required:true},
         product: {
             type:mongoose.Schema.Types.ObjectId,
             required: true,
@@ -26,7 +27,7 @@ const orderSchema = mongoose.Schema({
         city:{
             type:String,required:true
         },
-        postalCode:{
+        postal:{
             type:String,required:true
         },
         
@@ -38,7 +39,7 @@ const orderSchema = mongoose.Schema({
     },
     paymentMethod:{
         type:String,
-        required:true,
+        required:false,
     },
     paymentResult:{ //esto me lo da paypal
         id:{type:String},

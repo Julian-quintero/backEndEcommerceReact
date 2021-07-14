@@ -22,8 +22,8 @@ const authUser = asyncHandler(async (req, res) => {
       })
       
   }else{
-      res.status(401)
-      throw new Error('invalid email or password')
+      res.status(404)
+      throw new Error('Usuario no valido')
   }
 });
 
@@ -47,6 +47,44 @@ const getUserProfile = asyncHandler(async (req, res) => {
         
     }else {
         console.log('entre');
+        res.status(404)
+        throw new Error('User not found')
+    }
+
+
+  });
+
+    //@desc  Update a new user
+//@route PUT /api/users/profile
+//@acess Private
+
+  const updateUserProfile = asyncHandler(async (req, res) => {  
+      
+    const user = await User.findById(req.user._id) // encontrar un documento por email
+
+
+    if (user) {
+
+        user.name = req.body.name || user.name      
+        user.email = req.body.email || user.email
+        if (req.body.password) {
+            user.password = req.body.password            
+        }
+
+        const updatedUser = await user.save()
+
+          res.json({
+          _id:updatedUser._id,
+          name:updatedUser.name,
+          email:updatedUser.email,
+          isAdmin:updatedUser.isAdmin,
+          token:generateToken(updatedUser._id)
+      })
+
+      
+        
+    }else {
+        console.log('error usuario no encontrado');
         res.status(404)
         throw new Error('User not found')
     }
@@ -97,4 +135,4 @@ const registerUser = asyncHandler(async (req, res) => {
 
   });
 
-export {authUser,getUserProfile,registerUser}
+export {authUser,getUserProfile,registerUser,updateUserProfile}
