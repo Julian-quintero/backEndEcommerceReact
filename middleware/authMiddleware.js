@@ -35,4 +35,17 @@ if (!token) {
 
 })
 
-export {protect}
+const admin = (req,res,next) => {
+    if (req.user && req.user.isAdmin) // si existe el usuario y tambien es admin
+
+     {
+       
+        next()
+        
+    }else {
+        res.status(401)
+        throw new Error('not authorized as admin')
+    }
+}
+
+export {protect,admin}
