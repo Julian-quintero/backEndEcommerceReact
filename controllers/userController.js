@@ -160,7 +160,6 @@ const getUserById = asyncHandler(async (req, res) => {
 const updateUser = asyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id); // encontrar un documento por email
 
-    console.log('usuarioupdateback',req.body)
   
     if (user) {
       user.name = req.body.name 
