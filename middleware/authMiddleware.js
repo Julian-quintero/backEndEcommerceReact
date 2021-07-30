@@ -36,6 +36,8 @@ if (!token) {
 })
 
 const admin = (req,res,next) => {
+
+
     if (req.user && req.user.isAdmin) // si existe el usuario y tambien es admin
 
      {

@@ -4,6 +4,11 @@ const reviewSchema = mongoose.Schema({
     name:{type:String,required:true},
     rating:{type:Number,required:true},
     comment:{type:String,required:true},
+    user:{ //usuario asociado al review
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:'User'
+    },
 
 
 },{timestamps:true})
@@ -19,6 +24,10 @@ const productSchema = mongoose.Schema({
         required:true
     },
     image:{
+        type:String,
+        required:true,    
+    },
+    description:{
         type:String,
         required:true,    
     },

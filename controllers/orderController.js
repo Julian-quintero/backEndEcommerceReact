@@ -50,7 +50,7 @@ const getOrderById = asyncHandler(async (req, res) => {
     "user",
     "name email"
   );
-  console.log("backend order", order);
+
   if (order) {
     res.json(order);
   } else {
@@ -95,4 +95,36 @@ const getMyOrders = asyncHandler(async (req, res) => {
   res.json(orders);
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid,getMyOrders };
+//@desc  Get all orders
+//@route GET /api/orders
+//@acess Private/admin
+
+const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate('user','id name');
+
+  res.json(orders);
+});
+
+//@desc  Update order to delivered
+//@route GET /api/orders/:id/delivered
+//@acess Private/admin
+
+
+const updateToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered= true;
+    order.deliveredAt = Date.now();
+    //paument result viene de paypal
+
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
+
+export { addOrderItems, getOrderById, updateOrderToPaid,getMyOrders,getOrders,updateToDelivered };
